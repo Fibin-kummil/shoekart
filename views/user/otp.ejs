@@ -111,17 +111,24 @@
       %>
       <p style="color: rgb(255, 140, 0);"><%= message %></p>
     <% } %>
-    <div class="vh-100 d-flex justify-content-center align-items-center">
-      <div class="col-md-5 shadow-sm border rounded-5 border-primary bg-white">
-        <h2 class="text-center mb-4 text-primary">Login Form</h2>
+    <div class="vh-100 d-flex justify-content-center align-items-center mt-5" >
+			<div class="col-md-5 shadow-sm border  bg-white ">
+				<div class="d-flex justify-content-center">
+					<img src="https://i0.wp.com/www.followchain.org/wp-content/uploads/2021/07/Forgot_password-rafiki_1_35.png?w=700&ssl=1" alt="" width="200px" height="200px">
+				</div>
+        <h2 class="text-center mb-4 text-black mt-3">Login Form</h2>
         <form class="OTP" id="OTP" action="/otp" method="post">
           <div class="mb-3">
             <label for="Otp" class="form-label">Enter OTP</label>
             <input type="text" id="otp" name="otp" class="form-control border border-primary">
           </div>
-          <h6 class="m-0 text-dark mt-3">Time Left: <span id="timer"></span></h6>
-          <div class="d-grid">
-            <button class="btn-primary" type="submit">Login</button>
+					
+					<span id="timer">1:00</span>
+              <a href="/otp" id="resend-link" class="d-none">Resend OTP</a>
+          <!-- <h6 class="m-0 text-dark mb-4">Time Left: <span id="timer"></span></h6> -->
+					<div class="d-grid d-flex justify-content-center">
+            <button class="btn-primary mb-4" type="submit">Login</button>
+					
           </div>
           <input type="hidden" name="newotp" value="<%=newOtp%>">
           <input type="hidden" name="name" value="<%=userData.name%>">
@@ -240,37 +247,33 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="js/gmaps.min.js"></script>
 	<script src="js/main.js"></script>
-  <script>
-    document.getElementById('timer').innerHTML = '2:00';
-
-    startTimer();
-       function startTimer() {
-           var presentTime = document.getElementById('timer').innerHTML;
-           var timeArray = presentTime.split(/[:]+/);
-           var m = timeArray[0];
-           var s = checkSecond((timeArray[1] - 1));
-           if (s == 59) { m = m - 1 };
-           if (m < 0) {
-               window.location.reload()
-               return;
-           }
-
-           if (s < 10 && m == "00") {
-               document.getElementById("clicable1").disabled = true;
-               document.getElementById("clicable2").disabled = true;
-               document.getElementById("insert").disabled = true;
-           }
-
-           document.getElementById('timer').innerHTML = m + ":" + s;
-           setTimeout(startTimer, 1000);
-       }
-
-       function checkSecond(sec) {
-           if (sec < 10 && sec >= 0) { sec = "0" + sec };
-           if (sec < 0) { sec = "59" };
-           return sec;
-       }
-</script>
+	<script>
+    // Set the countdown duration in seconds
+    const countdownDuration = 60;
+    
+    // Get the timer element
+    const timerElement = document.getElementById('timer');
+    
+    // Start the countdown timer
+    let countdown = countdownDuration;
+    const intervalId = setInterval(() => {
+      countdown--;
+      const minutes = Math.floor(countdown / 60);
+      const seconds = countdown % 60;
+      timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      if (countdown === 0) {
+        // Stop the countdown timer
+        clearInterval(intervalId);
+    
+        // Hide the timer element
+        timerElement.style.display = 'none';
+    
+        // Show the "Resend OTP" link
+        const resendLinkElement = document.getElementById('resend-link');
+        resendLinkElement.classList.remove('d-none');
+      }
+    }, 1000);
+    </script>
 </body>
 
 </html>

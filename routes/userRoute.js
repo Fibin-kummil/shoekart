@@ -3,9 +3,10 @@ const userRoute = express()
 const session = require("express-session")
 const nocache = require("nocache")
 userRoute.use(express.static('public'));
+const upload = require("../middleware/multer")
 
 
-const config = "fibinsecret"
+const config = "secret2"
 userRoute.use(
   session({
      secret: config,
@@ -15,48 +16,51 @@ userRoute.use(
 )
    
 
-//module require for check wether login or logout(middlewares)
-const userMidd = require("../middleware/userMidd")
-//userContoller require for do the action based on middlewares
-const userController = require("../controllers/userController")
 
+const userMidd = require("../middleware/userMidd")
+const userController = require("../controllers/userController");
+const cartController = require("../controllers/cartController")
 
 //views is a property of view engin, and set the path of views in that
-userRoute.set("view engine","ejs")
 userRoute.set("views","./views/user")
 userRoute.use(express.static('public/user'));
 
 
-//respons condent will covert it in to req.boady object for converting in to sting array and json format 
-userRoute.use(express.json())
-userRoute.use(express.urlencoded({extended:true}))
-userRoute.use(nocache())
+
+
 
 
 
 //user request,response and data giving to database working (post,get)
 userRoute.get("/",userMidd.isLogout,userController.loadHome)
-
-userRoute.get("/home",userMidd.isLogin,userController.loadHome)
-
 userRoute.get("/login",userMidd.isLogout,userController.loginLoad)
-
-userRoute.get("/logout",userMidd.isLogin,userController.userLogout)
-
 userRoute.get("/register",userMidd.isLogout,userController.loadRegister)
 
-
-userRoute.post("/login",userController.verifyLogin) 
 userRoute.post("/register",userController.insertUser,userController.loadOtp)
 userRoute.post("/otp",userMidd.isLogout,userController.verifyOtp)
 
 
 userRoute.get("/forget",userMidd.isLogout,userController.forgetLoad)
-userRoute.post("/forget",userController.forgetVerify)
-userRoute.post("/verify-otp",userController.forgetPasswordLoad)
-userRoute.post("/reset-password",userController.resetPassword)
+userRoute.post("/forget-password",userMidd.isLogout, userController.forgetVerify)
+userRoute.post("/reset-password",userMidd.isLogout,userController.forgetPasswordLoad)
+userRoute.post("/reset-newpassword",userMidd.isLogout,userController.resetPassword)
+userRoute.post("/login",userController.verifyLogin) 
 
 
+
+
+userRoute.use(userMidd.isBlock)
+
+userRoute.get("/home",userController.loadHome)
+userRoute.get("/logout",userMidd.isLogin,userController.userLogout)
+
+userRoute.get("/shop", userController.shop)
+userRoute.get("/single-product",userController.singleProduct)
+// userRoute.get("/banner",userMidd.isLogin,userController.loadBanner)
+userRoute.get("/cart",userMidd.isLogin,cartController.loadCart)
+userRoute.get("/addCart",userMidd.isLogin,upload.uploads.array("gImage",5),cartController.addCart)
+userRoute.post("/editCart",cartController.editCart)
+userRoute.get("/deleteCart",userMidd.isLogin,cartController.deleteCart)
 module.exports = userRoute
 
 

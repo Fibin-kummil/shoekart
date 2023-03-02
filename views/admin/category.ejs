@@ -61,17 +61,16 @@
                 <div class="navbar-nav w-100">
                     <a href="/admin/dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
-                        <div class="dropdown-menu bg-transparent border-0">
+                        <a href="/admin/banner" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Banner</a>                        <div class="dropdown-menu bg-transparent border-0">
                             <a href="button.html" class="dropdown-item">Buttons</a>
                             <a href="typography.html" class="dropdown-item">Typography</a>
                             <a href="element.html" class="dropdown-item">Other Elements</a>
                         </div>
                     </div>
                     <a href="/admin/users" class="nav-item nav-link"><i class="fa fa-th me-2"></i>users</a>
-                    <a href="form.html" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>category</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
+                    <a href="#" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>category</a>
+                    <a href="/products" class="nav-item nav-link"><i class="fa fa-table me-2"></i>products</a>
+                    <a href="/admin/coupon" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupon</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -98,7 +97,9 @@
                     <i class="fa fa-bars"></i>
                 </a>
                 <form class="d-none d-md-flex ms-4">
-                    <input class="form-control bg-dark border-0" type="search" placeholder="Search">
+                    <!-- <input class="form-control bg-dark border-0" type="search" placeholder="Search"> -->
+                    <input class="form-control bg-dark border-0" type="search" placeholder="Search"name="search">
+
                 </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
@@ -185,6 +186,7 @@
             <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <h6 class="mb-0">CATEGORIES</h6>
+                       
                         <a href="category">Show All</a>
                     </div>
 
@@ -212,15 +214,83 @@
                                   <%= category[i-1].name %>
                                 </td>
                                 <td>
-                                  <button data-toggle="modal" style="display: none;" data-target="#edit" onclick="edit('<%= category[i-1]._id %>')">EDIT</button>
-                                  <a class=" btn btn-primary text-white btn-sm"
+                                  <!-- <button data-toggle="modal" style="display: none;" data-target="#edit" onclick="edit('<%= category[i-1]._id %>')">EDIT</button> -->
+
+
+                                 
+
+                                  <!-- <a class="btn btn-primary ms-4 mt-4"
                                     onclick="return confirm('do you want to edit <%= category[i-1].name %>?')"
-                                    href="/admin/editCategory?id=<%= category[i-1]._id %>"><i style="color: #ff0000;"
-                                      class="m-r-5 mdi mdi-border-color"></i>Edit</a>
-                                  <a class="btn btn-primary text-white btn-sm"
-                                    onclick="return confirm('do you want to delete <%= category[i-1].name %>?')"
-                                    href="/admin/deleteCategory?id=<%= category[i-1]._id %>"><i style="color: #ff0000;"
-                                      class="m-r-5 mdi mdi-border-color"></i>Delete</a><br>
+                                    href="/category/editCategory?id=<%= category[i-1]._id %>"><i style="color: #ff0000;"
+                                      class="m-r-5 mdi mdi-border-color"></i>Edit</a> -->
+             <button class="btn btn-primary ms-4 mt-4"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editProductModal"
+                      onclick="populateEditForm('<%= category[i-1].name %>')">
+                Edit
+              </button>
+
+              <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form method="POST" enctype="multipart/form-data" action="/category/editCategory">
+                        <input type="hidden" name="id" id="editProductId">
+                        <div class="mb-3">
+                          <!-- <label for="editProductName" class="form-label">Product Name</label> -->
+                          <input type="text" class="form-controlname="editCategory" name="categorys" id="editCategoryName">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+                
+
+
+
+
+
+
+                
+
+
+
+
+                                  <!-- Button to trigger the modal -->
+<a href="#" class="btn btn-primary ms-4 mt-4" data-bs-toggle="modal" data-bs-target="#deleteModal-<%= category[i-1]._id %>">Delete</a>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal-<%= category[i-1]._id %>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete <%= category[i-1].name %>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a id="delete-link-<%= category[i-1]._id %>" href="/category/deleteCategory?id=<%= category[i-1]._id %>" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
                                      
                                 </td>
                               </tr>
@@ -238,7 +308,40 @@
 <div>
    
 </div>
-<button name="addcategory" class="btn btn-primary ms-4 mt-4" type="submit"  ><a  href="addCategory" class="text-white">Add Category</a></button>
+
+<!-- <button name="addcategory" class="btn btn-primary ms-4 mt-4" type="submit"  ><a  href="addCategory" class="text-white">Add Category</a></button> -->
+<button type="button" name="addCategory" class="btn btn-primary ms-4 mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Category</button><br>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Category</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/category" method="post">
+                <div class="md-3">
+                    <label for="category" class="form-label">Enter New category</label>
+                    <input name="category" type="text" class="form-control" required>
+                </div>
+                <div class="container text-center my-3">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
             <!-- <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-sm-12 col-xl-6">
@@ -565,6 +668,14 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+        function populateEditForm(category) {
+  // Set the values of the form fields to the product data
+ 
+  $('#editCategory').val(category);
+  
+}
+    </script>
 </body>
 
 </html>

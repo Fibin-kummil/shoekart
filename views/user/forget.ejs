@@ -15,7 +15,7 @@
 	<!-- meta character set -->
 	<meta charset="UTF-8">
 	<!-- Site Title -->
-	<title>LIBERTY</title>
+	<title>shoeKart</title>
 
 	<!--
 		CSS
@@ -52,7 +52,7 @@
   <%
   if(typeof message !="undefined"){
     %>
-    <p style="color: rgb(255, 140, 0);"><%= message %></p>
+    <p style="color: rgb(255, 140, 0);"></p>
   <% } %>
   <div class="vh-100 d-flex justify-content-center align-items-center ">
     <div class="col-md-5 shadow-sm border  bg-white ">
@@ -64,6 +64,7 @@
       <form action="/forget-password" method="post">
         <div class="mb-3">
           <!-- <label for="Otp" class="form-label ">phone</label> -->
+					<a href="" class="d-flex justify-content-center font-weight-bold text-danger"><%= message %></a>
           <input type="text" id="phone" name="mobile" class="form-control border border-primary" placeholder="Enter your mobile number">
         </div>
         <div class="d-grid d-flex justify-content-center">

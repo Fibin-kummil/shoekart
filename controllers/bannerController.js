@@ -6,6 +6,7 @@ const products = require("../models/productModel");
 const banner =require("../models/bannerModel")
 const bannerController = require("../controllers/bannerController")
 const { model } = require("mongoose");
+const { deleteOne } = require("../models/adminModel");
 
 
 const loadBanner =async(req,res)=>{
@@ -30,10 +31,9 @@ const addBanner = async(req,res)=>{
     })
     console.log("banners");
     const bannerData= await banners.save()
-    //const productData =await products.find()
+    
     if(bannerData){
       console.log(bannerData);
-     // res.render("products",{message:"Product Added",products:productData,category:categoryData})
      res.redirect("/admin/banner")
     }else{
       res.redirectr("/admin/banner")
@@ -45,25 +45,36 @@ const addBanner = async(req,res)=>{
   }
 }
 
-const blockBanner = async(req,res)=>{
+
+
+const delectBanner = async(req,res)=>{
   try {
+    const bannerData = await banner.find()
     const id = req.query.id
-    const userData = await banner.findOne({_id:id})
-    if(userData.block){
-      const userData =await banner.findByIdAndUpdate({_id:id},{$set:{block:0}});console.log("block");
-    }else{
-      await banner.findByIdAndUpdate({_id:id},{$set:{block:1}});console.log("unblock");
-    }
-    res.redirect("/admin/banner")
+    console.log(id);
+    await banner.deleteOne({_id:id})
+    res.render("banner",{banner:bannerData})
   } catch (error) {
     console.log(error.message);
   }
 }
 
-
+const chooseBanner = async(req,res)=>{
+  try{
+    const id=req.query.id
+  await banner.findOneAndUpdate({block:1},{$set:{block:0}})
+  await banner.findByIdAndUpdate({ _id: id },{$set:{block:1}})
+  
+    res.redirect('/admin/banner')
+  }catch(error){
+    console.log(error);
+  }
+}
 
 module.exports = {
   loadBanner,
   addBanner,
-  blockBanner,
+  chooseBanner,
+  delectBanner,
+  
 }

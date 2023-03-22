@@ -51,23 +51,31 @@ const loadCategory = async(req,res)=>{
 
 
 const addCategory = async(req,res)=>{
-  const categoryData = await category.findOne({name:req.body.category})
-  // const categoryAll = await category.find()
-  if(categoryData){
+  try {
+  const categoryData = await category.find()
+  let categories=[]
+  categoryData.map(x=>{
+      categories = [...categories,x.name.toUpperCase()]     
+  })
+  const newCategory = req.body.category.toUpperCase()
+  console.log(categories , newCategory);
+
+  if(categories.includes(newCategory)){
     res.redirect("category")
     
   }else{
-  try {
+
     const Category = new category({
       name: req.body.category,
     })
     await Category.save()
     res.redirect("/category")
+  }
   } catch (error) {
     console.log(error.message);
   }
 }
-}
+
 
 const loadEditCategory =async(req,res)=>{
   try {

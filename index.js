@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb://127.0.0.1:27017/1st_project_database");
+mongoose.connect("mongodb+srv://fibin:fibinkummil@cluster0.ycqoymd.mongodb.net/liberty");
 const nocache = require("nocache")
+
+// const path = require('path');
 
 const express = require("express");
 const app = express();
@@ -10,6 +12,10 @@ app.set("view engine","ejs")
 
 app.use(express.static('public/user'));
 app.use(express.static('public/admin'));
+
+// app.use(express.static(path.join(__dirname , 'public/user')));
+// app.use(express.static(path.join(__dirname , 'public/admin')));
+
 
 
 // app.set("view engine", "ejs");

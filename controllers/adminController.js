@@ -3,8 +3,8 @@ const USER = require("../models/userModel")
 const bcrypt = require("bcrypt")
 const category = require("../models/categoryModel")
 const coupons = require("../models/couponModel")
-
-
+const PRODUCT = require("../models/productModel")
+const ORDER =  require("../models/orderModel")
 
 const loadLogin = async(req,res)=>{
   try {
@@ -43,15 +43,48 @@ const verifyLogin = async(req,res)=>{
   }
 }
 
-const loadDashboard = async(req,res)=>{
+// const loadDashboard = async(req,res)=>{
+//   try {
+//     console.log(req.session.admin_id);
+//     const adminData =await ADMIN.findById({_id: req.session.admin_id})
+//     res.render("dashboard",{admin:adminData})
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
+const loadDashboard = async (req, res) => {
   try {
-    console.log(req.session.admin_id);
-    const adminData =await ADMIN.findById({_id: req.session.admin_id})
-    res.render("dashboard",{admin:adminData})
+    const products = await PRODUCT.find()
+    let pds=[],qty=[]
+    products.map(x=>{
+     pds=[...pds,x.name]
+     qty=[...qty,x.stock]
+    })
+    const arr = [];
+    const order = await ORDER.find().populate('products.item.productId');    
+    for (let orders of order) {
+      for (let product of orders.products.item) {
+        const index = arr.findIndex(obj => obj.product == product.productId.productName);
+        if (index !== -1) {
+          arr[index].qty += product.qty;
+        } else {
+          arr.push({ product: product.productId.productName, qty: product.qty });
+        }
+      }
+    }
+    const key1 = [];
+    const key2 = [];
+    arr.forEach(obj => {
+      key1.push(obj.product);
+      key2.push(obj.qty);
+    });
+    const userData = await USER.findById({ _id: req.session.admin_id });
+    res.render("dashboard", { admin: userData,key1,key2,pds,qty});
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 const loadLogout = async(req,res)=>{
     try {
@@ -69,12 +102,14 @@ const loadUsers = async(req,res)=>{
       search = req.query.search
     }
     const userData = await USER.find({
+      
       $or: [
         {name:{$regex:".*" + search + ".*"}},
         {email:{$regex:".*" + search + ".*"}},
         {mobile:{$regex:".*" + search + ".*"}},
       ]
     })
+    console.log("www",userData);
     // console.log(userData );
     res.render("users",{users:userData})
   } catch (error) {
@@ -87,11 +122,13 @@ const blockUser = async(req,res)=>{
     const id = req.query.id
     const userData = await USER.findOne({_id:id})
     if(userData.block){
-      const userData =await USER.findByIdAndUpdate({_id:id},{$set:{block:0}});console.log("block");
+      const userData =await USER.findByIdAndUpdate(id,{$set:{block:0}});
+      console.log("12345",userData);
     }else{
-      await USER.findByIdAndUpdate({_id:id},{$set:{block:1}});console.log("unblock");
+      await USER.findByIdAndUpdate(id,{$set:{block:1}});console.log("unblock");
     }
     res.redirect("/admin/users")
+    // res.render("users")
   } catch (error) {
     console.log(error.message);
   }
@@ -187,6 +224,7 @@ const addCoupon = async(req,res)=>{
       couponName: req.body.couponName,
       amount:req.body.discountAmount,
       value: req.body.value,
+      expiry: req.body.exp,
       discount:req.body.discound,
     })
     await Coupon.save()
@@ -195,7 +233,9 @@ const addCoupon = async(req,res)=>{
     console.log(error.message);
   }
 }
-} 
+}
+// const cartData = await userData.populate('cart.item.productId')
+// console.log('cart.item.cart.totalPrice'); 
  
 const blockCoupon = async(req,res)=>{
   try {

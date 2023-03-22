@@ -7,6 +7,10 @@ const productSchema = mongoose.Schema({
     type:String,
     required:true
   },
+  productDescription: {
+    type:String,
+    required:true
+  },
   stock:{
     type:Number,
     required:true

@@ -27,7 +27,7 @@ productsRoute.get("/editProduct",adminMidd.isLogin,productsController.loadEditPr
 productsRoute.get("/deleteProduct",adminMidd.isLogin,productsController.deleteProduct)
 productsRoute.post("/editProduct",upload.uploads.array("gImage",5),productsController.editProduct)
 productsRoute.get("/block",adminMidd.isLogin,productsController.blockProduct)
-
+productsRoute.post("/deletesingleimage",adminMidd.isLogin,productsController.deletesingleimage)
 
 module.exports = productsRoute
 

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <title>shoeKart</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -45,8 +45,8 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                <a href="#" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>shoeKart</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <!-- <div class="position-relative">
@@ -73,6 +73,8 @@
                     <a href="/category" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Category</a>
                     <a href="/products" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Products</a>
                     <a href="/admin/coupon" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupon</a>
+                    <a href="/admin/orderList" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>ORDER</a>
+
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -202,6 +204,7 @@
                             <th scope="col">Banner Name</th>
                             <th scope="col">Banner Image</th>
                             <th scope="col">Active</th>
+                            <th scope="col">Delect</th>
                             
                             
                             
@@ -223,20 +226,49 @@
                                 </td>
                                     
                                 <td>
-                                    <%= banner[i-1].bannerImage %>
+                                   
+                                    <img src="/uploads/<%=banner[i-1].bannerImage[0]%>" alt="" width="100vw" height="80vh" >
+                                    <img src="/uploads/<%=banner[i-1].bannerImage[1]%>" alt="" width="100vw" height="80vh" >
+                                    <img src="/uploads/<%=banner[i-1].bannerImage[2]%>" alt="" width="100vw" height="80vh" >
                                 </td>
                                
                                
                                 <td>
                                     <% if(banner[i-1].block){%>
-                                        <button class="btn  btn-outline-danger" data-toggle="modal" data-target="#block"
-                                        onclick="block('<%- banner[i-1]._id %>')">off</button>
+                                        <button class="btn  btn-outline-success" data-toggle="modal" data-target="#block"
+                                        onclick="block('<%- banner[i-1]._id %>')">choose</button>
                                       <% } else{%>
-                                        <button class="btn  btn-outline-success" data-toggle="modal" data-target="#unBlock"
-                                        onclick="block('<%- banner[i-1]._id %>')">on</button>
+                                        <button class="btn  btn-outline-danger" data-toggle="modal" data-target="#unBlock"
+                                        onclick="block('<%- banner[i-1]._id %>')">choose</button>
                                       <%}%> 
                                       <a id="<%- banner[i-1]._id %>" style=" display: none;"
-                                       href="/admin/blockBanner?id=<%= banner[i-1]._id %>"></a>
+                                       href="/admin/chooseBanner?id=<%= banner[i-1]._id %>"></a>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-primary ms-4 mt-4" data-bs-toggle="modal" data-bs-target="#deleteModal-<%= banner[i-1]._id %>">Delete</a>
+
+<!--DELECT Modal -->
+<div class="modal fade" id="deleteModal-<%= banner[i-1]._id %>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete <%= banner[i-1].banner %>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a id="delete-link-<%= banner[i-1]._id %>" href="/admin/delectBanner?id=<%= banner[i-1]._id %>" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DELECT END -->
                                 </td>
                                 
                                 </tr>
@@ -245,46 +277,42 @@
                                         <td colspan="6">Coupon Not Found</td>
                                     </tr>
                                     <% } %>
+
+                                          <!-- block -->
                                     <div class="modal fade" id="block" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
                                             aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                               <div class="modal-content">
-                                                <!-- <div class="modal-header">
-                                                  <h5 class="modal-title" id="exampleModalLongTitle">Confirm Block</h5>
-                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                  </button>
-                                                </div> -->
+                                                
                                                 <div class="modal-body">
-                                                  <p>Are you sure want to Block banner ?</p>
+                                                  <p>This Banner is already choose</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
-                                                  <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="save()">Block</button>
+                                                  <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+                                                  <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="save()">choose</button> -->
                                                 </div>
                                               </div>
                                             </div>
-                                          </div>
-                                          <div class="modal fade" id="unBlock" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                    </div>
+                                    <div class="modal fade" id="unBlock" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
                                             aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                               <div class="modal-content">
-                                                <!-- <div class="modal-header">
-                                                  <h5 class="modal-title" id="exampleModalLongTitle">Confirm UnBlock</h5>
-                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                  </button>
-                                                </div> -->
+                                               
                                                 <div class="modal-body">
-                                                    <p>Are you sure want to UnBlock banner?</p>
+                                                    <p>Are you sure want to choose this banner ?</p>
                                                   </div>
                                                   <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="save()">UnBlock</button>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="save()">choose</button>
                                                   </div>
                                                 </div>
                                               </div>
-                                          </div>
+                                    </div>
+
+                                        <!-- block end -->
+
+
                              </tbody>  
                              </table>   
                              </div>  
@@ -327,7 +355,7 @@
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <div class="form-outline flex-fill mb-0">
                                               <label class="form-label" for="form3Example4c">Image</label>
-                                              <input type="file" id="form3Example4c" class="form-control" name="gImage" multiple required/>
+                                              <input type="file" id="form3Example4c" class="form-control" name="gImage" accept="image/*" multiple required/>
                                             </div>
                                           </div>
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4" style="margin: 1rem;">
@@ -716,7 +744,7 @@
           console.log(`true${val}`);
       }
           
-        </script>
+    </script>
 </body>
 
 </html>

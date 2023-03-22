@@ -23,6 +23,10 @@ const couponSchema = mongoose.Schema({
     type:Boolean,
     default:1
   },
+  expiry:{
+    type:Date,
+    required:true
+  },
   block:{
     type: Number,
     default:1,

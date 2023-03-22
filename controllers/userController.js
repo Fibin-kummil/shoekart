@@ -18,27 +18,19 @@ const loginLoad = async(req,res)=>{
 }
 const loadHome = async(req,res)=>{
   try {
-    bannerData = await banner.find();
+    // if(req.session.user){check=true}{check=false}
+    bannerData = await banner.find({block:1});
+    
+    // console.log(bannerData);
     if(req.session.user1){check = true}else {check = false}
-    if(req.session.user1=null){res.render("login",{message:"you are blocked",user:req.session.user})}
-      res.render("home",{user:check})
-      //show home if session had or not
+   
+      res.render("home",{user:check,banner:bannerData})
+    
   } catch (error) {
     console.log(error.message);
   }
 } 
-// const loadHome = async (req, res) => {
-//   try {
-//     bannerData = await banner.find();
-//     console.log(bannerData);
-//     if (req.session.user) {
-//       session = req.session.user;
-//     } else session = false;
-//     res.render("home", { user: session,banner:bannerData});
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
+
 
 const loadRegister = async(req,res)=>{
   try {
@@ -62,6 +54,7 @@ const userLogout = async(req,res)=>{
 
 const verifyLogin = async(req,res)=>{
   try {
+    
     const email = req.body.email
     const password = req.body.password
     console.log(req.body);
@@ -134,6 +127,7 @@ const loadOtp = async(req,res)=>{
 const verifyOtp = async(req,res)=>{
  
   try {
+    
     const otp = newOtp
     console.log(otp);
     console.log(req.body.otp);
@@ -154,16 +148,17 @@ const verifyOtp = async(req,res)=>{
     if(user){
       
       //this is the posion that we creat a session for user
-          if(user.block==1){
-            req.session.user_id=user.user_id
+          // if(user.block==1){
+            // if(req.session.user_id){check = true}else {check = false}
+            req.session.user_id=user._id
             req.session.user=user.name
             req.session.user1=true
             res.redirect("/home")
-          }else{
-            res.render("login",{message:"your are blocked"}) 
-          }
+          // }else{
+          //   res.render("login",{message:"your are blocked"}) 
+          // }
   
-      res.status(201).redirect("/home")
+      // res.status(201).redirect("/home")
     }
     else{
       res.status(404).render("otp",{message:"invalid OTP"})
@@ -178,7 +173,7 @@ const verifyOtp = async(req,res)=>{
 
 const forgetLoad = async(req,res)=>{
   try {
-    res.render("forget")
+    res.render("forget",{message:""})
   } catch (error) {
     console.log(error.message);
   }
@@ -187,9 +182,15 @@ const forgetLoad = async(req,res)=>{
 const forgetVerify = async(req,res)=>{
   try {
     const mobile = req.body.mobile
+    const userData = await USER.findOne({mobile:mobile})
+    if(userData){
     newOtp = message.sendMessage(mobile,res)
     console.log(newOtp);
     res.render("forget-password",{mobile,newOtp})
+  }else {
+    res.render("forget",{message:"Invalid phone number" })
+  }
+
   } catch (error) {
     console.log(error.message);
   }
@@ -255,9 +256,9 @@ const shop = async (req, res) => {
       console.log('sort ' + req.query.sort);
       console.log('category ' + arr);
       if (sort == 0) {
-          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} ,{ $or: [{ name: { $regex: '' + search + "." } }, { category: { $regex: "." + search + ".*" } }] }] }).sort({$natural:-1}).skip(skip).limit(3)
+          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} ,{ $or: [{ productName: { $regex: '' + search + "." } }, { category: { $regex: "." + search + ".*" } }] }] }).sort({$natural:-1}).skip(skip).limit(3)
       } else {
-          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} , { $or: [{ name: { $regex: '' + search + "." } }, { category: { $regex: "." + search + ".*" } }] }] }).sort({ price: sort }).skip(skip).limit(3)
+          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} , { $or: [{ productName: { $regex: '' + search + "." } }, { category: { $regex: "." + search + ".*" } }] }] }).sort({ price: sort }).skip(skip).limit(3)
       }
       console.log(productData.length + ' results found');
       if (req.session.user) { session = req.session.user } else session = false

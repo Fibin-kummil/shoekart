@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <title>shoeKart</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -45,8 +45,8 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                <a href="#" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>shoeKart</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <!-- <div class="position-relative">
@@ -72,6 +72,7 @@
                     <a href="/category" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>category</a>
                     <a href="/products" class="nav-item nav-link"><i class="fa fa-table me-2"></i>products</a>
                     <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupon</a>
+                    <a href="/admin/orderList" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>ORDER</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -194,9 +195,10 @@
                             <!-- <th scope="col"><input class="form-check-input" type="checkbox"></th> -->
                             <th scope="col">sl.no</th>
                             <th scope="col">coupon name</th>
-                            <th scope="col">enter discount</th>
-                            <th scope="col">enter minimum value</th>
+                            <th scope="col">discount pesantage</th>
+                            <th scope="col">enter minimum purchase</th>
                             <th scope="col">enter maximum discount</th>
+                            <th scope="col">expery date</th>
                             
                             <th scope="col">Action</th>
                             
@@ -225,6 +227,9 @@
                                 </td>
                                 <td>
                                     <%= coupons[i-1].discount %>
+                                </td>
+                                <td>
+                                    <%= coupons[i-1].expiry %>
                                 </td>
                                
                                 <td>
@@ -345,6 +350,15 @@
                                             <div class="form-outline flex-fill mb-0">
                                                 <label class="form-label" for="form3Example1c">maximum discount</label>
                                               <input type="number" id="form3Example1c" class="form-control" name="discound" required/>
+                                              
+                                            </div>
+                                          </div>
+
+                                          <div class="d-flex flex-row align-items-center mb-2">
+                                           
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="form3Example1c"  >expiry date</label>
+                                              <input type="date" id="form3Example1c" class="form-control" name="exp" required/>
                                               
                                             </div>
                                           </div>

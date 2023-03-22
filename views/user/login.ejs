@@ -15,7 +15,7 @@
 	<!-- meta character set -->
 	<meta charset="UTF-8">
 	<!-- Site Title -->
-	<title>Karma Shop</title>
+	<title>shoeKart</title>
 
 	<!--
 		CSS
@@ -38,7 +38,7 @@
 			<nav class="navbar navbar-expand-lg navbar-light main_box">
 				<div class="container">
 					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""></a>
+					<a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt="" style="width: 160px; height: 100px;"></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="icon-bar"></span>
@@ -123,7 +123,7 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="login_box_img">
-						<img class="img-fluid" src="img/login.jpg" alt="">
+						<img class="img-fluid" src="img/login.jpg" alt="" >
 						<div class="hover">
 							<h4>New to our website?</h4>
 							<p>If You Want To Purchase Please Creat A Account</p>
@@ -134,29 +134,34 @@
 				<div class="col-lg-6">
 					<div class="login_form_inner">
 						<h3>Log in to enter</h3>
-						<form class="row login_form" action="/login" method="post" id="contactForm" novalidate="novalidate">
+						<form class="row login_form" action="/login" method="post" id="contactForm" novalidate="novalidate" onsubmit="return allChecking()" >
 							<div class="col-md-12 form-group">
 								<input type="text" class="form-control" id="email" name="email" placeholder="email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'"
+
 								onchange="emailValidate()">
+								<p id="Email" style="color: #c01010;" ></p>
 
 							</div>
 							<div class="col-md-12 form-group">
 								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'"
 								onchange="passwordValidate()">
+								<p id="Password"style="color:  #c01010;" ></p>
 							</div>
-							<div class="col-md-12 form-group">
+							<p style="color: rgb(255, 4, 4); align-items: center; justify-content: center; "><%= message %></p>
+							<!-- <div class="col-md-12 form-group">
 								<div class="creat_account">
-									<!-- <input type="checkbox" id="f-option2" name="selector"> -->
-									<!-- <label for="f-option2">Keep me logged in</label> -->
+									<input type="checkbox" id="f-option2" name="selector">
+									<label for="f-option2">Keep me logged in</label>
 									
 								</div>
-							</div>
+							</div> -->
+							
 							<div class="col-md-12 form-group">
 								<button type="submit" value="submit" class="primary-btn" 
-								onclick="emailValidate(),passwordValidate()">Log In</button>
+								onclick="allChecking()">Log In</button>
 								<a href="/forget">Forgot Password?</a>
 							</div>
-							<%= message %>
+							
 						</form>
 					</div>
 				</div>
@@ -276,7 +281,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		}
 		function passwordValidate(){
 			let password=document.getElementById("password").value;
-			if(password.length <8){
+			if(password.length <4){
 				document.getElementById("Password").innerHTML="please enter valied password";
 				return false
 	

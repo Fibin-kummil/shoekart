@@ -3,6 +3,7 @@ const USER = require("../models/userModel")
 const bcrypt = require("bcrypt")
 const category = require("../models/categoryModel");
 const PRODUCT = require("../models/productModel");
+const COUPON = require("../models/couponModel")
 
 const loadCart = async(req,res)=>{
   try {
@@ -10,7 +11,9 @@ const loadCart = async(req,res)=>{
     if(req.session.user_id){
         const userData=await USER.findById({_id:req.session.user_id})
         const completeUser=await userData.populate('cart.item.productId')
-        res.render('cart',{user:check,id:req.session.user_id,cartProducts:completeUser.cart})
+        // const Coupon = await COUPON.find()
+        // console.log(coupon);
+        res.render('cart',{user:check,id:req.session.user_id,cartProducts:completeUser.cart,})
     }else{
         res.redirect('/login')
     }
@@ -19,11 +22,24 @@ const loadCart = async(req,res)=>{
   }
 }
 
+const updateCart=async(req,res)=>{
+  try{
+      let {quantity,_id} = req.body
+      console.log("quan==="+quantity);
+      console.log("id======"+_id);
+      const userData=await USER.findById({_id:req.session.user_id})
+      const total=await userData.updateCart(_id,quantity)
+      res.json({total})
+
+  }catch(error){
+      console.log(error);
+  }
+}
+
 const addCart = async(req,res)=>{
   try {
     if(req.session.user1){check=true} else check=false;
     const productId=req.query.id
-    // console.log(productId);
     userSession=req.session
     if(userSession.user_id){
         const userData=await USER.findById({_id:userSession.user_id})
@@ -34,16 +50,7 @@ const addCart = async(req,res)=>{
     }else{
         res.redirect('/login')
     }
-    // if(req.session.user1){check = true}else {check = false}
-    // const id = req.query.id
-
-    // userSession=req.session
-    //     if(userSession.user_id){
-    //         const userData=await USER.findById({_id:userSession.user_id})
-        
-    // const product = await PRODUCT.findById({_id:id})
-    // res.render("cart",{PRODUCT:product,user:check})
-    //   }
+    
   } catch (error) {
     console.log(error.message);
   }
@@ -86,4 +93,5 @@ module.exports={
   addCart,
   editCart,
   deleteCart,
+  updateCart,
 }

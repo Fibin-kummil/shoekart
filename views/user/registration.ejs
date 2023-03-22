@@ -17,7 +17,7 @@
 	<!-- meta character set -->
 	<meta charset="UTF-8">
 	<!-- Site Title -->
-	<title>LIBERTY</title>
+	<title>shoeKart</title>
 
 	<!--
 		CSS
@@ -40,7 +40,7 @@
 			<nav class="navbar navbar-expand-lg navbar-light main_box">
 				<div class="container">
 					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""></a>
+					<a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt="" style="width: 160px; height: 100px;"></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="icon-bar"></span>
@@ -136,21 +136,26 @@
 				<div class="col-lg-6">
 					<div class="login_form_inner">
 						<h3>CREATE AN ACCOUNT</h3>
-						<form class="row login_form" action="/register" method="post" id="contactForm" novalidate="novalidate">
+						<form class="row login_form" action="/register" method="post" id="contactForm" novalidate="novalidate" onsubmit="return validateSignup()" >
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="name" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+								<input type="text" onchange="validateName()" class="form-control" id="name" name="name" 
+								placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+								<p id="errName" style="color: brown;" ></p>
 							</div>
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="email" name="email" placeholder="email id" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email id'">
+								<input type="text" onchange="validateEmail()" class="form-control" id="email" name="email"
+								 placeholder="email id" onfocus="this.placeholder = ''" onblur="this.placeholder = 'email id'">
+							<p id="errEmail" style="color: brown;" ></p>
+						  </div>
+              <div class="col-md-12 form-group">
+								<input type="text" onchange="validateNumber()" class="form-control" id="mobile" name="mobile"
+								 placeholder="phone number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'phone number'">
+								 <p id="errNumber" style="color: brown;" ></p>
 							</div>
-                            <div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="mobile" name="mobile" placeholder="phone number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'phone number'">
-								<!-- <button type="button" onclick="sendOTP()">send OTP</button>
-								<label for="otp">Enter OTP:</label>
-               <input type="text" id="otp" name="otp"> -->
-							</div>
-                            <div class="col-md-12 form-group">
-								<input type="password" class="form-control" id="password" name="password" placeholder="password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'password'">
+               <div class="col-md-12 form-group">
+								<input type="password" onchange="validatePassword()" class="form-control" id="password" name="password"
+								 placeholder="password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'password'">
+								 <p id="errPassword" style="color: brown;" ></p>
 							</div>
 					<!-- <div class="col-mb-12 text-danger text-center"> <%= message  %> </div> -->
 					<div class="row">
@@ -273,6 +278,63 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="js/gmaps.min.js"></script>
 	<script src="js/main.js"></script>
+	<script>
+		function validateEmail(){
+   let emailId=document.getElementById("email").value;
+    if(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(emailId)==false){
+      document.getElementById("errEmail").innerHTML="Please enter valid email ";
+      return false;
+    }else{
+      document.getElementById("errEmail").innerHTML="";
+      return true;
+    }
+  }
+  function validateName(){
+    let name=document.getElementById("name").value;
+     if(name ==""){
+      document.getElementById("errName").innerHTML="please enter name";
+      return false
+       }else{
+        document.getElementById("errName").innerHTML="";
+          return true
+       }
+  }
+  function validatePassword(){
+    let password=document.getElementById("password").value;
+    if(password.length <6){
+      document.getElementById("errPassword").innerHTML="please enter valid password";
+      return false
+
+    }else{
+      document.getElementById("errPassword").innerHTML="";
+      return true;
+    }
+  }
+
+  function validateNumber(){
+    let number=document.getElementById("mobile").value;
+     if(/^[0-9]+$/.test(number)==false){
+      document.getElementById("errNumber").innerHTML="please enter a valid number";
+      return false
+     }
+    else if(number.length != 10){
+      document.getElementById("errNumber").innerHTML="please enter 10 digits";
+      return false
+       }else{
+        document.getElementById("errNumber").innerHTML="";
+          return true
+       }
+  }
+  
+  function validateSignup(){
+    if(validateEmail()&&validateName()&&validatePassword()&&validateNumber()){
+      return true
+    }else{
+      return false
+    }
+  }
+
+	</script>
 </body>
 
 </html>

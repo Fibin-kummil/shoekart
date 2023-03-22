@@ -33,15 +33,6 @@ const loadProducts = async(req,res)=>{
 
 
 
-// const loadAddProduct = async(req,res)=>{
-//   try {
-   
-//     res.render("add-product")
-//   } catch (error) {
-    
-//   }
-// }
-
 
 const addProduct = async(req,res)=>{
   try {
@@ -49,6 +40,7 @@ const addProduct = async(req,res)=>{
     
     const Product = new products({
       productName:req.body.gName,
+      productDescription:req.body.gDescription,
       stock:req.body.gQuantity,
       price:req.body.gPrice,
       category:req.body.category,
@@ -72,9 +64,7 @@ const addProduct = async(req,res)=>{
 
 const loadEditProduct =async(req,res)=>{
   try {
-    // const categoryData = await category.find()
-    // const productData = await products.findOne({_id: req.query.id})
-    // console.log(productData);
+    
     const categoryData = await category.find()
     const productData =await products.findOne({_id:req.query.id})
     console.log(productData);
@@ -88,12 +78,13 @@ const loadEditProduct =async(req,res)=>{
 
 const editProduct = async(req,res)=>{
   try {
-    // const categoryData = await category.find()
+    
     const productData = await products.findByIdAndUpdate(
       {_id:req.query.id},
       {
         $set:{
           productName:req.body.gName,
+          productDescription:req.body.gDescription,
           stock:req.body.gQuantity,
           price:req.body.gPrice,
           category:req.body.category,
@@ -103,7 +94,7 @@ const editProduct = async(req,res)=>{
     )
     res.redirect("/products")
   } catch (error) {
-    
+    console.log(error.message);
   }
 }
 
@@ -138,6 +129,19 @@ const blockProduct = async(req,res)=>{
   }
 }
 
+const deletesingleimage=async(req,res)=>{
+  try {
+    let{itemId,imageName}=req.body
+    console.log(itemId,imageName);
+
+    const productData = await products.updateOne({_id:itemId},{$pull:{image:imageName}},{upsert:true})
+    console.log(productData);
+    res.json({success:true});
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 
 module.exports = {
   loadProducts,
@@ -147,6 +151,6 @@ module.exports = {
   deleteProduct,
   editProduct,
   blockProduct,
+  deletesingleimage,
 }
-
 

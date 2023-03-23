@@ -3,8 +3,6 @@ mongoose.set('strictQuery', false);
 mongoose.connect("mongodb+srv://fibin:fibinkummil@cluster0.ycqoymd.mongodb.net/liberty");
 const nocache = require("nocache")
 
-// const path = require('path');
-
 const express = require("express");
 const app = express();
 

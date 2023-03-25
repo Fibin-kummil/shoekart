@@ -23,6 +23,10 @@ const userSchema = mongoose.Schema({
     default:1,
     require:true
   },
+  wallet:{
+    type: Number,
+    default:0
+  },
   cart:{
     item:[{
         productId:{

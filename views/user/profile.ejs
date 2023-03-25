@@ -195,9 +195,8 @@
                           <td><%=key.payment%></td>
                           <td><%=key.status%></td>
                           <td>
-														<% if(key.status === 'Order Return') { %>
-															
-															<a href="/returnOrder?id=<%=key._id%>" class="btn btn-warning disabled-links">Return</a>
+														<% if (key.status === 'Order Return') { %>
+															<a href="/returnOrder?id=<%= key._id %>" class="btn btn-warning disabled-links">Return</a>
 															<style>
 																.disabled-links {
 																	pointer-events: none;
@@ -205,27 +204,39 @@
 																}
 															</style>
 														<% } else if (key.status === 'Canceled') { %>
-															<a href="/cancelOrder?id=<%=key._id%>" class="btn btn-danger disabled-link">Cancel</a>
+															<a href="/cancelOrder?id=<%= key._id %>" class="btn btn-danger disabled-link">Cancel</a>
 															<style>
 																.disabled-link {
 																	pointer-events: none;
 																	opacity: 0.5;
 																}
 															</style>
-															<% } else if(key.status == 'Delivered' ){ %>
-																<a href="/returnOrder?id=<%=key._id%>" class="btn btn-warning">Return</a>
-														<% } else if (key.status !== 'Canceled')  { %>		
-															<a href="/cancelOrder?id=<%=key._id%>" class="btn btn-danger">Cancel</a>
+														<% } else if (key.status === 'Delivered') { %>
+															<% const currentDate = new Date();
+																 const deliveredDate = new Date(key.updatedAt);
+																 const daysElapsed = (currentDate - deliveredDate) / (1000 * 60 * 60 * 24);
+																 if (daysElapsed > 14) { %>
+																	 <a href="/returnOrder?id=<%= key._id %>" class="btn btn-warning disabled-links">Return</a>
+																	 <style>
+																		 .disabled-links {
+																			 pointer-events: none;
+																			 opacity: 0.5;
+																		 }
+																	 </style>
+																 <% } else { %>
+																	 <a href="/returnOrder?id=<%= key._id %>" class="btn btn-warning">Return</a>
+																 <% } %>
+														<% } else { %>
+															<a href="/cancelOrder?id=<%= key._id %>" class="btn btn-danger">Cancel</a>
 															<style>
 																.disabled-links {
 																	pointer-events: none;
 																	opacity: 0.5;
 																}
 															</style>
-														
 														<% } %>
-														
-                          </td>
+													</td>
+													
                          
                           <td>
                               <a href="/userViewOrder?id=<%=key._id%>" class="btn btn-primary">View details</a>

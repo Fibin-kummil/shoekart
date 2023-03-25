@@ -25,7 +25,7 @@ const checkOutLoad = async(req,res)=>{
 
     const Coupon = await COUPON.find()
    
-    res.render("checkout",{coupon:Coupon,address:preAddress,cart:cartData.cart,user:check})
+    res.render("checkout",{coupon:Coupon,address:preAddress,cart:cartData.cart,user:check,Wallet:userData})
     }
   } catch (error) {
     console.log(error.message);
@@ -100,11 +100,47 @@ const order =async(req,res)=>{
     
 
     await USER.updateOne({_id:req.session.user_id},{$unset:{cart:1}})
-    console.log('order successfull');
+    console.log('order successfully');
 
    res.render("confirmation")
-    }else{
-      console.log("order successfull");
+
+    }else if(req.body.wallet){
+      console.log("order successfulll");
+      // const walletAmount = req.body.amount
+       w = userData.wallet
+       t = orderData.amount
+      console.log(w,t);
+      if(w>=t){
+        w=w-t
+        t=0
+        await USER.updateOne({_id:req.session.user_id},{$set:{wallet:w}})
+      }else{
+         bal = t - w
+        t = bal 
+        await USER.updateOne({_id:req.session.user_id},{$set:{wallet:0}})
+        orderData.amount=t
+        res.render('onlinePayment',{amount:t})
+
+      }
+      
+     await orderData.save()
+     const productData = await userData.populate('cart.item.productId')
+      console.log("1"+productData);
+
+      for(let key of productData.cart.item){ 
+              console.log('initial stock'+key.productId.stock);
+                     
+              newStock = key.productId.stock - key.qty
+                console.log('final stock'+newStock);
+                await PRODUCT.updateOne({_id:key.productId},{$set:{stock:newStock}})
+            }
+    
+    
+    await USER.updateOne({_id:req.session.user_id},{$unset:{cart:1}})
+    console.log('order successfull');
+    res.render("confirmation")
+    }else if(req.body.payment=='paypal'){
+      console.log("order successfulls");
       console.log(req.body.totalAmount);
       res.render('onlinePayment',{amount:req.body.totalAmount})
       
@@ -118,9 +154,20 @@ const order =async(req,res)=>{
 
  const onlinePayment = async (req,res)=>{
   try {
-    await orderData.save()
+    
+    const productData = await userData.populate('cart.item.productId')
+    console.log("1"+productData);
+
+    for(let key of productData.cart.item){ 
+            console.log('initial stock'+key.productId.stock);
+                   
+            newStock = key.productId.stock - key.qty
+              console.log('final stock'+newStock);
+              await PRODUCT.updateOne({_id:key.productId},{$set:{stock:newStock}})
+          }
     await USER.updateOne({_id:req.session.user_id},{$unset:{cart:1}})
     console.log('order successfull');
+    await orderData.save()
    res.render("confirmation")
   } catch (error) {
     console.log(error);

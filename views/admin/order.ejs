@@ -223,13 +223,16 @@
                     <thead>
                     <th>SI NO</th>
                     <!-- <th>Images</th> -->
-                    <th>Order Id</th>
-                    
+                    <th>OrderId</th>
+                    <th>product</th>
+                    <th>Qty</th>
+                    <th>price</th>
                     <th>Date</th>
                      <th>Payment Status</th>
                     <th>Bill Amount</th>
                     <th>Status</th>
                     <th>action</th>
+                    <th>more details</th>
                     </thead>
                     <tbody id="tbody">
                       <%if(order.length >0){%>
@@ -240,7 +243,21 @@
                             <td>
                               <%=order[i-1]._id %>
                             </td>
-                          
+                          <td>
+                            <% for(let key of order[i-1].products.item){ %>
+                              <%=key.productId.productName %><br>
+                            <% }%>
+                          </td>
+                          <td>
+                            <% for(let key of order[i-1].products.item){ %>
+                              <%=key.qty %><br>
+                            <% }%>
+                          </td>
+                          <td>
+                            <% for(let key of order[i-1].products.item){ %>
+                             <%=key.price %> <br>
+                            <% }%>
+                          </td>
                             
                             <td>
                               <%= order[i-1].createdAt.toDateString() %>
@@ -691,9 +708,23 @@
       
       
         var doc = new jsPDF()
-          doc.autoTable({ html: '#ordersTable' })
+        doc.autoTable({
+                    html: '#ordersTable',
+                    columns: [
+                        { header: 'Order ID', dataKey: 'Order ID' },
+                        { header: 'Product', dataKey: 'Product' },
+                        { header: 'Price', dataKey: 'Price' },
+                        { header: 'Method', dataKey: 'Method' },
+                        { header: 'Method', dataKey: 'Method' },
+                        { header: 'Method', dataKey: 'Method' },
+                        { header: 'Method', dataKey: 'Method' },
+                        { header: 'Method', dataKey: 'Method' },
+                        { header: 'Method', dataKey: 'Method' },
+                    ]
+                });
           doc.save('sales.pdf')
       });
+   
       
       // Download as Excel
       document.getElementById('downloadExcelBtn').addEventListener('click', function() {
@@ -724,26 +755,63 @@
             data:{sdate:startdate,edate:enddate},
             success:function(data){
                 console.log(data);
-                let tablebody=""
+                let order = data.ordersdata
+                console.log(order);
+                const ordersContainer = document.getElementById('tbody');
+                ordersContainer.innerHTML=''
+if (order.length > 0) {
+  order.forEach((item, index) => {
+    let productsName = '';
+    let productsQty = '';
+    let productsPrice = '';
 
-                if(data.ordersdata.length>0){
-                    for(i=0;i<data.ordersdata.length;i++){
-                          tablebody += `<tr>
-                            <th>${i+1}</th>
-                         <td>${data.ordersdata[i]._id}</td>
-                        <td>${data.ordersdata[i].userId.name}</td>
-                        <td>${new Date(data.ordersdata[i].ordersdata).toDateString()}</td>
-                        <td>${data.ordersdata[i].payment}</td>
-                        <td>${data.ordersdata[i].products.totalPrice}</td>
-                        <td>${data.ordersdata[i].status}</td>
-                        </tr>` 
+    item.products.item.forEach((product) => {
+      productsName += `${product.productId.productName}<br>`;
+      console.log(product.productId.productName);
+      productsQty += `${product.qty}<br>`;
+      productsPrice += `${product.price}<br>`;
+    });
+console.log(productsName);
+    let updateButton = `<button type="submit" class=" btn-primary rounded btn-sm" style="display:${item.status === "Canceled" ? "none" : "block"}">Update</button>`;
 
-                    }
-                }else{  
-                    // tablebody=`<tr><td colspan="5">Products Not Found</td></tr>`
-                  
-                }
-                document.getElementById("tbody").innerHTML= tablebody;
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <th>${index + 1}</th>
+      <td>${item._id}</td>
+      <td>${productsName}</td>
+      <td>${productsQty}</td>
+      <td>${productsPrice}</td>
+      <td>${item.createdAt}</td>
+      <td>${item.payment}</td>
+      <td>${item.products.totalPrice}</td>
+      <td>${item.status}</td>
+      <td>
+        <form action="/admin/updateOrder" method="post">
+          <select name="status" >
+            <option>${item.status}</option>
+            <option>In Progress</option>
+            <option>Packed</option>
+            <option>Shipped</option>
+            <option>Delivered</option>
+            <option>Canceled</option>
+          </select>
+          <input type="hidden" name="orderid" value="${item._id}">
+          ${updateButton}
+        </form>
+      </td>   
+      <td>
+        <a href="/admin/adminViewOrder?id=${item._id}"><button type="submit" class="btn btn-primary btn-sm">Details</button></a>
+      </td>
+    `;
+    ordersContainer.appendChild(row);
+  });
+} else {
+  ordersContainer.innerHTML = `
+    <tr>
+      <td colspan="5">Order not found</td>
+    </tr>
+  `;
+}
                    
             },
             error: function (jqXHR, textStatus, errorThrown) {

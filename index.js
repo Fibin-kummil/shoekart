@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb+srv://fibin:fibinkummil@cluster0.ycqoymd.mongodb.net/liberty");
+mongoose.connect("mongodb+srv://fibin:fibinkummil@cluster0.ycqoymd.mongodb.net/shoekart");
 const nocache = require("nocache")
 
 const express = require("express");
@@ -55,8 +55,8 @@ app.use("/category", categoryRoute);
 const productsRoute = require("./routes/productsRoute");
 app.use("/products", productsRoute);
 
-app.listen(5000, function () {
-  console.log("Ready To Run The Server 5000 ");
+app.listen(3000, function () {
+  console.log("Ready To Run The Server 3000 ");
 });
 
 

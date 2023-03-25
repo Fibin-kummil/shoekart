@@ -246,9 +246,23 @@
                                 <li><a href="#">Discound <span id="discount"></span></a></li>
                                 
                                 <li><a href="#">Total <span  id="total"><%= cart.totalPrice %></span></a></li>
+                                <!-- <li><a href="#">Wallet <span id="wallet"><%= Wallet.wallet %> </span></a></li> -->
                             </ul>
                             <input type="hidden" id="odt" name="totalAmount" value="<%= cart.totalPrice %>">
                         <div vaue=payment >
+                            <% if(Wallet.wallet>0){ %>
+                            <div class="payment_item">
+                                <div class="">
+                                    
+                                    <input type="checkbox" id="wallet" name="wallet" value="wal" onchange="pay('<%= Wallet.wallet %>')"  >
+                                    <label for="f-option4">Wallet</label>
+                                    <div class="check"></div>
+                                </div>
+                                <p>Wallet Amount: <%= Wallet.wallet %> </p>
+                            </div>
+                          <%  } %>
+                     
+
                             <div class="payment_item">
                                 <div class="radion_btn">
                                     <input type="radio" id="f-option5" name="payment" value="cod">
@@ -264,25 +278,18 @@
                                     <label for="f-option6">Paypal </label>
                                     <img src="img/product/card.jpg" alt="">
                                     <div class="check"></div>
-                                    
                                 </div>
                                 <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
                                     account.</p>
                             </div>
-
-
-
-                          
-
-
-
-
+               
                         </div>
-                            <div class="creat_account">
+
+                            <!-- <div class="creat_account">
                                 <input type="checkbox" id="f-option4" name="selector">
                                 <label for="f-option4">I’ve read and accept the </label>
                                 <a href="#">terms & conditions*</a>
-                            </div>
+                            </div> -->
                             <!-- <a class="primary-btn"  type="submit">Proceed to Paypal</a> -->
                             <button class="primary-btn">  Proceed to Pay</button>
                         </div>
@@ -480,6 +487,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="js/main.js"></script>
 
     <script>
+        let Total
         function apply(id) {
             exp = document.getElementById("exp"+id).value
             disc = parseInt(document.getElementById('disc'+id).value)
@@ -503,11 +511,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     if(d>disc){
                         d =disc
                     }
-                    total = subT-d;
+                    Total = subT-d;
                     document.getElementById('discount').innerHTML = d
-                    document.getElementById('total').innerHTML = total
-                    document.getElementById('odt').value = total
-                    console.log(d,total);
+                    document.getElementById('total').innerHTML = Total
+                    document.getElementById('odt').value = Total
+                    console.log(d,Total);
                     document.getElementById("err").innerHTML =''
                   }
                   else{
@@ -518,10 +526,41 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
             document.getElementById("discount").innerHTML = 0
         }
     }
+     
 
+  function pay(w){
+       console.log(w);
+       total =parseInt(document.getElementById('total').innerHTML)
+       console.log(total);
+       if(document.getElementById('wallet').checked){
+       if(w >= total){
+           bal=0;
+           console.log('jgbkfnzjhnb');
+           document.getElementById("total").innerHTML = bal
+           document.getElementById("f-option6").removeAttribute("required")
+           document.getElementById("f-option5").removeAttribute("required")
+           document.getElementById("f-option5").checked=false
+           document.getElementById("f-option6").checked=false
+           document.getElementById("f-option6").setAttribute('disabled', '');
+           document.getElementById("f-option5").setAttribute('disabled', '');
+
+       }else{
+        bal=total-w
+        console.log('dfkuyiglo'+bal);
+       document.getElementById("total").innerHTML = bal
+       document.getElementById("f-option6").checked=true
+       document.getElementById("f-option5").setAttribute('disabled', '');
+
+       }}else{
+        document.getElementById("f-option6").removeAttribute('disabled');
+        document.getElementById("f-option5").removeAttribute('disabled');
+        document.getElementById("total").innerHTML = Total ?? '<%= cart.totalPrice %>'
+       }
+    }
        
 
     </script>
+    
 </body>
 
 </html>

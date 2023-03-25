@@ -189,7 +189,7 @@
             <!-- Sale & Revenue Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
-                    <div class="col-sm-6 col-xl-3">
+                    <!-- <div class="col-sm-6 col-xl-3">
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
@@ -206,7 +206,7 @@
                                 <h6 class="mb-0">$1234</h6>
                             </div>
                         </div> 
-                    </div>
+                    </div> -->
                     <!-- <div class="col-sm-6 col-xl-3">
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-area fa-3x text-primary"></i>
@@ -216,7 +216,7 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="col-sm-6 col-xl-3">
+                    <!-- <div class="col-sm-6 col-xl-3">
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-pie fa-3x text-primary"></i>
                             <div class="ms-3">
@@ -224,7 +224,7 @@
                                 <h6 class="mb-0">$1234</h6>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!-- Sale & Revenue End -->
@@ -235,10 +235,12 @@
                <input type="hidden" id="qty" value="<%=qty%>">
             <input type="hidden" id="key1" value="<%=key1%>"/>
                 <input type="hidden" id="key2" value="<%=key2%>"/>
-
-                <canvas id="myChart2" class="mt-5" style="  width:100%;max-width:700px"></canvas>
-
-            <script
+                
+                <div class="d-flex justify-content-evenly">
+                <canvas id="myChart2" class="mt-5" style="  width:100%;max-width:600px"></canvas>
+                <canvas id="myChart" class="mt-5" style="  width:100%;max-width:500px"></canvas>
+            </div>
+                <script
 src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 </script>
 <script>
@@ -266,9 +268,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     
     new Chart("myChart", {
       type: "bar",
+      
       data: {
         labels: xValues,
         datasets: [{
+            label:xValues,
           backgroundColor: barColors,
           data: yValues,x
         }]

@@ -11,7 +11,7 @@ const bannerSchema = mongoose.Schema({
     },
     block:{
         type:Number,
-        default:1,
+        default:0,
         required:true
     },
     isAvailable:{

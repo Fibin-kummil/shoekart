@@ -78,7 +78,7 @@ const loadEditProduct =async(req,res)=>{
 
 const editProduct = async(req,res)=>{
   try {
-    
+    if (req.files.length != 0) {
     const productData = await products.findByIdAndUpdate(
       {_id:req.query.id},
       {
@@ -92,6 +92,21 @@ const editProduct = async(req,res)=>{
         }
       }
     )
+    }else{
+      const productData = await products.findByIdAndUpdate(
+        {_id:req.query.id},
+        {
+          $set:{
+            productName:req.body.gName,
+            productDescription:req.body.gDescription,
+            stock:req.body.gQuantity,
+            price:req.body.gPrice,
+            category:req.body.category,
+            
+          }
+        }
+      )
+    }
     res.redirect("/products")
   } catch (error) {
     console.log(error.message);

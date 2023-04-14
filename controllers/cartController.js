@@ -24,6 +24,7 @@ const loadCart = async(req,res)=>{
 
 const updateCart=async(req,res)=>{
   try{
+    // let quantity = req.body.quantity
       let {quantity,_id} = req.body
       console.log("quan==="+quantity);
       console.log("id======"+_id);

@@ -256,9 +256,10 @@ const shop = async (req, res) => {
       console.log('sort ' + req.query.sort);
       console.log('category ' + arr);
       if (sort == 0) {
-          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} ,{ $or: [{ productName: { $regex: '' + search + "." } }, { category: { $regex: "." + search + ".*" } }] }] }).sort({$natural:-1}).skip(skip).limit(3)
+          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} ,{ $or: [{ productName: { $regex: '.*' + search + ".*" } }, { category: { $regex: "." + search + ".*" } }] }] }).sort({$natural:-1}).skip(skip).limit(3)
+          // { $regex: ".*" + search + ".*" }
       } else {
-          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} ,{$text:{$search:productName}}]  }).sort({ price: sort }).skip(skip).limit(3)
+          productData = await PRODUCT.find({  $and: [{ category: arr },{block:1} ,{ $or: [{ productName: { $regex: '.*' + search + ".*" } }, { category: { $regex: "." + search + ".*" } }] }] }).sort({ price: sort }).skip(skip).limit(3)
       }
       console.log(productData.length + ' results found');
       if (req.session.user) { session = req.session.user } else session = false
